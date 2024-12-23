@@ -1,0 +1,14 @@
+﻿body {
+    background-color: green;
+}
+.machineBlock {
+    display: block;
+    background-color: gainsboro;
+    flex-grow: 1;
+    width: 120px;
+}
+
+.machineBlockHeader {
+    background-color: grey
+}
+

@@ -1,0 +1,68 @@
+﻿@using MachinePark.Entities
+@using MachinePark.Service
+@using static MachinePark.Service.MachineStorageService
+@inject MachineStorageService MachineStorageService
+
+
+<div class="machineListComponent, container">
+
+    <h3>MachineList</h3>
+    <ul>
+        @foreach (var machine in machineList)
+        {
+            <li class="machineBlock">
+                <div class="machineBlockHeader row bg-dark" >
+
+                    <div class="headerTitle col-10 col-md-7">
+                        <h4 class="ps-3 ps-md-2 p-1">@machine.SerialNumber</h4>
+                    </div>
+                    <div class="headerId col-2 text-end">
+                        <h4 class="pe-2 pe-xl-4 p-1">Id: @machine.Id </h4>
+                    </div>
+                </div>
+                <div class="machineBlockBody row">
+                    <div class="bodyInfo col ps-2">
+                        <ul>
+                            <li>Type: @machine.MachineType</li>
+                            <li>Parked: Spot @machine.ParkingSpot</li>
+                        </ul>
+
+
+                    </div>
+                    <div class="col-2, bodyToggler">
+
+                    </div>
+                    <div class="machineStatys col">
+                        @if (machine.IsRunning == true)
+                        {
+                            <h4 class="text-success fw-bold">Machine is Active</h4>
+                        }
+                        else
+                        {
+                            <h4 class="text-danger fw-bold">Machine is Inactive</h4>
+                        }
+                    </div>
+                </div>
+
+            </li>
+
+
+
+        }
+    </ul>
+</div>
+
+@code {
+    int pageSize = 5;
+    private IEnumerable<Machine> machineList=> MachineStorageService.MachineGarage;
+
+    protected override void OnInitialized()
+    {
+        MachineStorageService.OnChange += StateHasChanged;
+    }
+
+    public void Dispose(){
+        MachineStorageService.OnChange -= StateHasChanged;
+    }
+
+}
