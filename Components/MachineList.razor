@@ -1,65 +1,95 @@
 ﻿@using MachinePark.Entities
 @using MachinePark.Service
 @using static MachinePark.Service.MachineStorageService
+
 @inject MachineStorageService MachineStorageService
 
 
-<div class="machineListComponent, container">
 
-    <h3>MachineList</h3>
-    <ul>
-        @foreach (var machine in machineList)
-        {
-            <li class="machineBlock">
-                <div class="machineBlockHeader row bg-dark" >
+<h3>MachineList</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @nameof(Machine.SerialNumber)
+            </th>
+            <th>
+                @nameof(Machine.Id)
+            </th>
+            <th>
+                @nameof(Machine.MachineType)
+            </th>
+            <th>
+                @nameof(Machine.ParkingSpot)
+            </th>
+            <th>
+                @nameof(Machine.IsRunning)
+            </th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var machine in machineList) {
+            <tr>
+                <td>
+                    @machine.SerialNumber
+                </td>
+                <td>
+                    @machine.Id
+                </td>
+                <td>
+                    @machine.MachineType
+                </td>
+                <td>
+                    @machine.ParkingSpot
+                </td>
+                <td>
+                @if (machine.IsRunning)
+                {
+                    <span class="badge text-bg-success">Active</span>
+                }
+                else{
 
-                    <div class="headerTitle col-10 col-md-7">
-                        <h4 class="ps-3 ps-md-2 p-1">@machine.SerialNumber</h4>
-                    </div>
-                    <div class="headerId col-2 text-end">
-                        <h4 class="pe-2 pe-xl-4 p-1">Id: @machine.Id </h4>
-                    </div>
-                </div>
-                <div class="machineBlockBody row">
-                    <div class="bodyInfo col ps-2">
-                        <ul>
-                            <li>Type: @machine.MachineType</li>
-                            <li>Parked: Spot @machine.ParkingSpot</li>
-                        </ul>
-
-
-                    </div>
-                    <div class="col-2, bodyToggler">
-
-                    </div>
-                    <div class="machineStatys col">
-                        @if (machine.IsRunning == true)
-                        {
-                            <h4 class="text-success fw-bold">Machine is Active</h4>
-                        }
-                        else
-                        {
-                            <h4 class="text-danger fw-bold">Machine is Inactive</h4>
-                        }
-                    </div>
-                </div>
-
-            </li>
-
-
-
+                        <h5><span class="badge bg-danger p-1">Inactive</span></h5>
+                }
+                </td>
+                <td><a class="bi bi-pencil-square"></a></td>
+            </tr>
         }
-    </ul>
-</div>
+    </tbody>
+</table>
 
+@* Todo: add pagination
+    <div class="input-group">
+    <button class="btn btn-outline-secondary" type="button"> &lt</button> 
+    <span>@CurrentPage / @GetPageCount()</span>
+    <button class="btn btn-outline-secondary" type="button">&gt</button>
+</div> *@
 @code {
-    int pageSize = 5;
+    // [Parameter]
+    // public int CurrentPage { get; set; } = 1;
+    // public int PageSize = 5;
+
     private IEnumerable<Machine> machineList=> MachineStorageService.MachineGarage;
+
 
     protected override void OnInitialized()
     {
         MachineStorageService.OnChange += StateHasChanged;
     }
+    // private IEnumerable<Machine> GetPage(){
+    //     return machineList.Skip(CurrentPage * PageSize).Take(PageSize);
+    // }
+
+    // public int GetPageCount(){
+    //     return machineList.Count() / PageSize;
+    // }
+
+
+
+
 
     public void Dispose(){
         MachineStorageService.OnChange -= StateHasChanged;
