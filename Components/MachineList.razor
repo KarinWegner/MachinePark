@@ -1,6 +1,7 @@
 ﻿@using MachinePark.Entities
 @using MachinePark.Service
 @using static MachinePark.Service.MachineStorageService
+@inject PageManager PageManager
 
 @inject MachineStorageService MachineStorageService
 
@@ -46,16 +47,16 @@
                     @machine.ParkingSpot
                 </td>
                 <td>
-                @if (machine.IsRunning)
-                {
-                    <span class="badge text-bg-success">Active</span>
-                }
-                else{
+                    @if (machine.IsRunning)
+                    {
+                        <span class="badge text-bg-success">Active</span>
+                    }
+                    else{
 
-                        <h5><span class="badge bg-danger p-1">Inactive</span></h5>
-                }
+                        <h5><span class="badge bg-danger p-1" >Inactive</span></h5>
+                    }
                 </td>
-                <td><a class="bi bi-pencil-square"></a></td>
+                <td><a class="bi bi-pencil-square" onclick="@(()=>setSelectedMachine(machine.Id))" href="/Edit"></a></td>
             </tr>
         }
     </tbody>
@@ -87,7 +88,9 @@
     //     return machineList.Count() / PageSize;
     // }
 
-
+    private void setSelectedMachine(int id){
+        PageManager.SetSelected(id);
+    }
 
 
 

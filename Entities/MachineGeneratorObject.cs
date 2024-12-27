@@ -9,7 +9,7 @@
                 MachineType = machineType;
             }
             public string SerialNumber { get; set; }
-            public string MachineType { get; set; }
+            public string? MachineType { get; set; }
         
     }
 }

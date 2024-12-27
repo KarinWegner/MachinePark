@@ -1,5 +1,6 @@
 using MachinePark.Components;
 using MachinePark.Service;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MachinePark
 {
@@ -13,6 +14,7 @@ namespace MachinePark
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
             builder.Services.AddSingleton<MachineStorageService>();
+            builder.Services.AddSingleton<PageManager>();
 
             var app = builder.Build();
 

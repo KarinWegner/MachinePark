@@ -1,6 +1,7 @@
 ﻿using System.Security.Cryptography;
 using MachinePark.Entities;
 using MachinePark.Service;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace MachinePark.Service
 {
@@ -17,6 +18,7 @@ namespace MachinePark.Service
             dataSeed = new DataSeed();
             SeedMachines(10);
         }
+        public event Action? OnChange;
         private int GetParkingSpot()
         {
             return MachineGarage.Count()+1;
@@ -37,6 +39,35 @@ namespace MachinePark.Service
 
             NotifyStateChanged();
         }
+        public void DeleteMachine(int id)
+        {
+            Machine machineToDelete = MachineGarage.FirstOrDefault(x => x.Id == id);
+            if (machineToDelete == null)
+            {
+                throw new Exception("Machine not found");
+            }
+            
+            MachineGarage.Remove(machineToDelete);
+            NotifyStateChanged();
+
+        }
+
+        public void EditMachine(int id, string serialNumber, string machineType)
+        {
+            Machine machineToEdit = MachineGarage.FirstOrDefault(x => x.Id == id);
+            if (machineToEdit == null)
+            {
+                throw new Exception("Machine not found");
+            }
+            machineToEdit.SerialNumber = serialNumber;
+            machineToEdit.MachineType = machineType;
+
+
+        }
+        public bool MachineExists(int id)
+        {
+           return MachineGarage.Any(m => m.Id == id);
+        }
         public async Task SeedMachines(int numberOfMachines)
         {
             IEnumerable<MachineGeneratorObject> seededMachines = await dataSeed.GenerateMachines(numberOfMachines);
@@ -51,7 +82,7 @@ namespace MachinePark.Service
         }
      
 
-        public event Action? OnChange;
+
        
 
     }

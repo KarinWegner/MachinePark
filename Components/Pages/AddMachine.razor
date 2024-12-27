@@ -1,0 +1,44 @@
+﻿@page "/AddMachine"
+@using MachinePark.Service
+@using System.ComponentModel.DataAnnotations
+@using System.ComponentModel
+@inject MachineStorageService MachineStorageService
+<h3>AddMachine</h3>
+<EditForm Model="@machine" OnValidSubmit="addMachine">
+
+    <DataAnnotationsValidator />
+
+    <div>
+        <label for="serialnumber">Serial Number:</label>
+        <InputText @bind-Value="machine.SerialNumber" id="serialnumber" />
+        <ValidationMessage For="@(()=> machine.SerialNumber)"/>
+    </div>
+    <div>
+        <label for="machinetype">Machine type:</label>
+        <InputText @bind-Value="machine.MachineType" id="machinetype" />
+        <ValidationMessage For="@(() => machine.MachineType)" />
+    </div>
+    <button type="submit" class="btn">Submit</button>
+
+</EditForm>
+
+@code {
+    private MachineModel machine = new MachineModel();
+
+
+    public class MachineModel{
+
+        [Required(ErrorMessage = "A Serial number is required")]
+        [Length(4, 16, ErrorMessage = "Serial number has to be between 4 and 16 characters")]
+
+        [RegularExpression(@"[A-ZÅÄÖ],[0-9]", ErrorMessage = "Serial number can only contain letters and digits")]
+        public string? SerialNumber { get; set; }
+        [DisplayName("Machine Type")]
+        public string? MachineType { get; set; }
+
+    }
+    private void addMachine(){
+
+        MachineStorageService.AddMachine(machine.SerialNumber, machine.MachineType);
+    }
+}
