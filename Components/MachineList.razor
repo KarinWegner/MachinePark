@@ -73,7 +73,7 @@
     // public int CurrentPage { get; set; } = 1;
     // public int PageSize = 5;
 
-    private IEnumerable<Machine> machineList=> MachineStorageService.MachineGarage;
+    private IEnumerable<Machine> machineList=> MachineStorageService.GetMachineList();
 
 
     protected override void OnInitialized()

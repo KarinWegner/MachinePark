@@ -3,42 +3,78 @@
 @using System.ComponentModel.DataAnnotations
 @using System.ComponentModel
 @inject MachineStorageService MachineStorageService
-<h3>AddMachine</h3>
-<EditForm Model="@machine" OnValidSubmit="addMachine">
 
-    <DataAnnotationsValidator />
+
+<EditForm Model="@Machine" OnValidSubmit="addMachine" id="@FormId" >
+    <DataAnnotationsValidator/>
 
     <div>
-        <label for="serialnumber">Serial Number:</label>
-        <InputText @bind-Value="machine.SerialNumber" id="serialnumber" />
-        <ValidationMessage For="@(()=> machine.SerialNumber)"/>
+        <label for="serialnumber" >serial number</label>
+        <InputText @bind-Value="Machine.SerialNumber" id="serialnumber" type="text"/>
+        <ValidationMessage For="@(()=> Machine.SerialNumber)"/>
     </div>
     <div>
         <label for="machinetype">Machine type:</label>
-        <InputText @bind-Value="machine.MachineType" id="machinetype" />
-        <ValidationMessage For="@(() => machine.MachineType)" />
+        <InputText @bind-Value="Machine.MachineType" id="machinetype" />
+        <ValidationMessage For="@(() => Machine.MachineType)" />
     </div>
-    <button type="submit" class="btn">Submit</button>
-
+    <button type="submit" @onclick="addMachine">Submit</button>
 </EditForm>
-
+<button type="submit" form="@FormId" class="btn btn-primary">Save</button>
+<button type="button" class="btn btn-light" ></button>
 @code {
-    private MachineModel machine = new MachineModel();
+    private MachineModel Machine = new MachineModel();
+    private string FormId = "formId";
 
 
-    public class MachineModel{
+    public class MachineModel :IValidatableObject
+    {
 
         [Required(ErrorMessage = "A Serial number is required")]
         [Length(4, 16, ErrorMessage = "Serial number has to be between 4 and 16 characters")]
-
-        [RegularExpression(@"[A-ZÅÄÖ],[0-9]", ErrorMessage = "Serial number can only contain letters and digits")]
-        public string? SerialNumber { get; set; }
+        public string? SerialNumber { get; set; } 
         [DisplayName("Machine Type")]
+
+        [Length(4, 16, ErrorMessage = "macihne type has to be between 1 and 16 characters")]
         public string? MachineType { get; set; }
 
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (string.IsNullOrWhiteSpace(SerialNumber))
+            {
+                yield return new ValidationResult(
+                    "Your machine needs a Serial number.",
+                    new[] { nameof(SerialNumber) });
+
+                if (SerialNumber.Count() >3 || SerialNumber.Count() <16)
+                {
+                    yield return new ValidationResult(
+                    "Serial number has to be between 1 and 16 characters.",
+                    new[] { nameof(SerialNumber) });
+                }
+            }
+            if (MachineType != null)
+            {
+                if (MachineType.Count() > 16 || MachineType.Count() < 1)
+                {
+                    yield return new ValidationResult(
+                        "macihne type has to be between 1 and 16 characters",
+                        new[] { nameof(MachineType) });
+                }
+            }
+        }
+    }
+    protected override void OnInitialized()
+    {
+        MachineStorageService.OnChange += StateHasChanged;
+        Machine = new MachineModel();
     }
     private void addMachine(){
 
-        MachineStorageService.AddMachine(machine.SerialNumber, machine.MachineType);
+        MachineStorageService.AddMachine(Machine.SerialNumber, Machine.MachineType);
+    }
+    public void Dispose()
+    {
+        MachineStorageService.OnChange -= StateHasChanged;
     }
 }

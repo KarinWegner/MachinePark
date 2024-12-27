@@ -7,7 +7,7 @@ namespace MachinePark.Service
 {
     public class MachineStorageService
     {
-        public List<Machine> MachineGarage;
+        private List<Machine> MachineGarage;
         public int NextId;
         private DataSeed dataSeed;
 
@@ -22,6 +22,10 @@ namespace MachinePark.Service
         private int GetParkingSpot()
         {
             return MachineGarage.Count()+1;
+        }
+        public IEnumerable<Machine> GetMachineList()
+        {
+            return MachineGarage;
         }
 
         public void AddMachine(string? serialNumber, string? machineType)
