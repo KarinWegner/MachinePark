@@ -1,0 +1,42 @@
+﻿@page "/details/{MachineID:int}"
+@rendermode InteractiveServer
+
+<h3>MachineDetails</h3>
+
+<div class="col-12 row">
+
+
+    <div class="col-10 row">
+        <div class="col-12 col-xxl-8">
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Machine ID</label>
+                <div class="col-sm-8">
+                    <label type="text" class="form-control-plaintext">@Machine.Id</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Machine Serial Number</label>
+                <div class="col-sm-8">
+                    <label type="text" readonly class="form-control-plaintext">@Machine.SerialNumber</label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Machine Type</label>
+                <div class="col-sm-8">
+                    <label type="text" readonly class="form-control-plaintext">@Machine.MachineType</label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Parking Spot</label>
+                <div class="col-sm-8">
+                    <label type="text" readonly class="form-control-plaintext">@Machine.ParkingSpot</label>
+                </div>
+            </div>
+
+            
+
+        </div>
+</div>
+</div>
