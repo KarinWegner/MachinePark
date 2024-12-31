@@ -1,7 +1,6 @@
 ﻿@page "/edit"
 @using MachinePark.Service
 @inject MachineStorageService MachineStorageService
-@inject PageManager PageManager
 
 
 
@@ -17,11 +16,7 @@
     {
         MachineStorageService.OnChange += StateHasChanged;
 
-        SelectedMachineId = PageManager.SelectedMachineId;
-        if (!MachineExists())
-        {
-            throw new Exception($"No machine with Id {SelectedMachineId} could be found.");
-        }
+        
     }
     private bool MachineExists(){
         return MachineStorageService.MachineExists(SelectedMachineId);

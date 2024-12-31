@@ -14,7 +14,6 @@ namespace MachinePark
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
             builder.Services.AddSingleton<MachineStorageService>();
-            builder.Services.AddSingleton<PageManager>();
 
             var app = builder.Build();
 
