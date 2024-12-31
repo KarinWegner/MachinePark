@@ -1,7 +1,6 @@
 ﻿@using MachinePark.Entities
 @using MachinePark.Service
 @using static MachinePark.Service.MachineStorageService
-@inject PageManager PageManager
 
 @inject MachineStorageService MachineStorageService
 
@@ -56,46 +55,15 @@
                         <h5><span class="badge bg-danger p-1" >Inactive</span></h5>
                     }
                 </td>
-                <td><a class="bi bi-pencil-square" onclick="@(()=>setSelectedMachine(machine.Id))" href="/Edit"></a></td>
+                <td>
+                    <a href="@($"details/{machine.Id}")" class="btn btn-outline-primary btn-sm mb-1">
+                        Details
+                    </a>
+                </td>
+
             </tr>
         }
     </tbody>
 </table>
 
-@* Todo: add pagination
-    <div class="input-group">
-    <button class="btn btn-outline-secondary" type="button"> &lt</button> 
-    <span>@CurrentPage / @GetPageCount()</span>
-    <button class="btn btn-outline-secondary" type="button">&gt</button>
-</div> *@
-@code {
-    // [Parameter]
-    // public int CurrentPage { get; set; } = 1;
-    // public int PageSize = 5;
-
-    private IEnumerable<Machine> machineList=> MachineStorageService.GetMachineList();
-
-
-    protected override void OnInitialized()
-    {
-        MachineStorageService.OnChange += StateHasChanged;
-    }
-    // private IEnumerable<Machine> GetPage(){
-    //     return machineList.Skip(CurrentPage * PageSize).Take(PageSize);
-    // }
-
-    // public int GetPageCount(){
-    //     return machineList.Count() / PageSize;
-    // }
-
-    private void setSelectedMachine(int id){
-        PageManager.SetSelected(id);
-    }
-
-
-
-    public void Dispose(){
-        MachineStorageService.OnChange -= StateHasChanged;
-    }
-
-}
+@* Todo: add pagination*@

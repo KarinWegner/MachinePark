@@ -7,7 +7,7 @@ namespace MachinePark.Service
 {
     public class MachineStorageService
     {
-        private List<Machine> MachineGarage;
+        public static List<Machine> MachineGarage;
         public int NextId;
         private DataSeed dataSeed;
 
