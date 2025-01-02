@@ -11,11 +11,14 @@ namespace MachinePark.Service
         public int NextId;
         private DataSeed dataSeed;
         public static List<Machine> Machines;
+        public static List<MachineType > MachineTypes;
 
         public MachineStorageService() 
         {            
             dataSeed = new DataSeed();
             Machines = dataSeed.SeedData(30);
+            MachineTypes = dataSeed.GetMachineTypes();
+            NextId = Machines.Count;
             
         }
         
@@ -36,7 +39,15 @@ namespace MachinePark.Service
             NotifyStateChanged();
 
         }
-
+        public void AddMachine(string serialNumber, MachineType machineType)
+        {
+            Machine newMachine = new Machine(){
+                SerialNumber = serialNumber,
+                MachineType = machineType,
+                Id = NextId++
+            };
+            Machines.Add(newMachine);
+        }
         public void EditMachine(int id, string serialNumber, string machineType)
         {
             
@@ -55,10 +66,10 @@ namespace MachinePark.Service
         {
             OnChange?.Invoke();
         }
-     
 
-
-       
-
+        internal List<MachineType> GetMachineTypes()
+        {
+            return MachineTypes;
+        }
     }
 }

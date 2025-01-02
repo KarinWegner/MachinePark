@@ -142,6 +142,8 @@ namespace MachinePark.Service
             new MachineType{MachineTypeId = 6, MachineTypeName = "Shredder"},
             new MachineType{MachineTypeId = 7, MachineTypeName = "Band saw"}
             ];
+
+        public List<MachineType> GetMachineTypes() { return _machineTypes;}
         
         
     }

@@ -19,7 +19,7 @@ namespace MachinePark.Entities
         [DisplayName("Is Active")]
             public bool IsRunning { get; set; } = false;
         [DisplayName("Parking spot")]
-            public int ParkingSpot { get; set; }
+            public int? ParkingSpot { get; set; }
 
         [DisplayName("On Lease")]
         public bool OnLease { get; set; } = false;

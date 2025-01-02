@@ -3,9 +3,10 @@
 @using System.ComponentModel.DataAnnotations
 @using System.ComponentModel
 @inject MachineStorageService MachineStorageService
+@rendermode InteractiveServer
 
 
-<EditForm Model="@Machine" OnValidSubmit="addMachine" id="@FormId" >
+<EditForm Model="@Machine" id="@FormId" >
     <DataAnnotationsValidator/>
 
     <div>
@@ -27,54 +28,6 @@
     private string FormId = "formId";
 
 
-    public class MachineModel :IValidatableObject
-    {
-
-        [Required(ErrorMessage = "A Serial number is required")]
-        [Length(4, 16, ErrorMessage = "Serial number has to be between 4 and 16 characters")]
-        public string? SerialNumber { get; set; } 
-        [DisplayName("Machine Type")]
-
-        [Length(4, 16, ErrorMessage = "macihne type has to be between 1 and 16 characters")]
-        public string? MachineType { get; set; }
-
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            if (string.IsNullOrWhiteSpace(SerialNumber))
-            {
-                yield return new ValidationResult(
-                    "Your machine needs a Serial number.",
-                    new[] { nameof(SerialNumber) });
-
-                if (SerialNumber.Count() >3 || SerialNumber.Count() <16)
-                {
-                    yield return new ValidationResult(
-                    "Serial number has to be between 1 and 16 characters.",
-                    new[] { nameof(SerialNumber) });
-                }
-            }
-            if (MachineType != null)
-            {
-                if (MachineType.Count() > 16 || MachineType.Count() < 1)
-                {
-                    yield return new ValidationResult(
-                        "macihne type has to be between 1 and 16 characters",
-                        new[] { nameof(MachineType) });
-                }
-            }
-        }
-    }
-    protected override void OnInitialized()
-    {
-        MachineStorageService.OnChange += StateHasChanged;
-        Machine = new MachineModel();
-    }
-    private void addMachine(){
-
-        MachineStorageService.AddMachine(Machine.SerialNumber, Machine.MachineType);
-    }
-    public void Dispose()
-    {
-        MachineStorageService.OnChange -= StateHasChanged;
-    }
+   
+   
 }
