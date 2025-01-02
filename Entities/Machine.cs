@@ -12,12 +12,35 @@ namespace MachinePark.Entities
 
         [RegularExpression(@"[A-ZÅÄÖ],[0-9]", ErrorMessage = "Serial number can only contain letters and digits")]
         public string? SerialNumber { get; set; }
+        [Required(ErrorMessage="A Machine Type needs to be selected")]
         [DisplayName("Machine Type")]
-            public string? MachineType { get; set; }
+            public MachineType MachineType { get; set; }
+
         [DisplayName("Is Active")]
             public bool IsRunning { get; set; } = false;
         [DisplayName("Parking spot")]
             public int ParkingSpot { get; set; }
+
+        [DisplayName("On Lease")]
+        public bool OnLease { get; set; } = false;
+
+        [DisplayName("Lease Holder")]
+        public LeaseHolder? LeaseHolder { get; set; } = default!;
+
+        [DisplayName("Lease start")]
+        [DataType(DataType.DateTime, ErrorMessage ="Lease Start is not in DateTime format")]
+        public DateTime? LeaseStart { get; set; } = default!;
+
+        [DisplayFormat(DataFormatString = @"{0:%d} days {0:%h} hours {0:%m} minutes")]
+        [DisplayName("Lease duration")]
+        public TimeSpan? LeaseDuration { get; set; } = default!;
+
+        [DisplayName("Lease end")]
+        public DateTime? LeaseEnd { get { return LeaseStart + LeaseDuration; } }
+
+        [DisplayName("Time left")]
+        [DisplayFormat(DataFormatString = @"{0:%d} days {0:%h} hours {0:%m} minutes")]
+        public TimeSpan? LeaseTimeLeft { get { return LeaseEnd - DateTime.UtcNow; } }
         
     }
 }
