@@ -10,7 +10,7 @@ namespace MachinePark.Components
         protected override void OnInitialized()
         {
             Task.Delay(2000);
-            machineList = MachineStorageService.MachineGarage;
+            machineList = MachineStorageService.Machines;
         }
     }
 }

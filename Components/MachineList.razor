@@ -1,11 +1,15 @@
 ﻿@using MachinePark.Entities
 @using MachinePark.Service
 @using static MachinePark.Service.MachineStorageService
+@attribute [StreamRendering(true)]
 
 @inject MachineStorageService MachineStorageService
 
 
-
+@if(machineList is null){
+    <h3><em>Loading...</em></h3>
+}
+else{
 <h3>MachineList</h3>
 <table class="table">
     <thead>
@@ -21,6 +25,9 @@
             </th>
             <th>
                 @nameof(Machine.ParkingSpot)
+            </th>
+            <th>
+                @nameof(Machine.OnLease)
             </th>
             <th>
                 @nameof(Machine.IsRunning)
@@ -40,10 +47,21 @@
                     @machine.Id
                 </td>
                 <td>
-                    @machine.MachineType
+                    @machine.MachineType.MachineTypeName
                 </td>
                 <td>
                     @machine.ParkingSpot
+                </td>
+                <td>
+                    @if (machine.OnLease)
+                    {
+                            <h5><span class="badge bg-secondary p-1 justify-content-center">Leased</span></h5>
+                    }
+                    else
+                    {
+
+                        <h5><span class="badge bg-info p-1">Available</span></h5>
+                    }
                 </td>
                 <td>
                     @if (machine.IsRunning)
@@ -65,5 +83,5 @@
         }
     </tbody>
 </table>
-
+}
 @* Todo: add pagination*@
