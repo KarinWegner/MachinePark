@@ -9,6 +9,9 @@ namespace MachinePark.Components.Pages
         [Parameter]
         public int MachineID { get; set; }
 
+        [Inject] 
+        MachineService MachineService { get; set; }
+
         private Machine Machine { get; set; } = new Machine();
 
         protected override void OnInitialized()
@@ -19,7 +22,10 @@ namespace MachinePark.Components.Pages
         {
             Machine.IsRunning = !Machine.IsRunning;
         }
-
+        private void Delete()
+        {
+            MachineService.DeleteMachine(MachineID);
+        }
 
     }
 }

@@ -34,7 +34,20 @@
                     <label type="text" readonly class="form-control-plaintext">@Machine.ParkingSpot</label>
                 </div>
             </div>
+            <button class="btn btn-outline-secondary" @onclick="@ChangeActiveStatus">
 
+                @if (Machine.IsRunning)
+                {
+                    <h3 class="text-danger">Deactive</h3>
+                }
+                else
+                {
+                    <h3 class="text-success">Activate</h3>
+                }
+            </button>
+
+            <button class="btn btn-outline-secondary" @onclick="@Delete">Delete machine          
+            </button>
             
 
         </div>
