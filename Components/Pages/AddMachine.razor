@@ -3,29 +3,39 @@
 @using System.ComponentModel.DataAnnotations
 @using System.ComponentModel
 @inject MachineStorageService MachineStorageService
+@inject MachineService MachineService
+
 @rendermode InteractiveServer
 
 
-<EditForm Model="@Machine" id="@FormId" >
+<EditForm Model="@Machine" @OnValidSubmit="@addMachine" >
     <DataAnnotationsValidator/>
 
     <div>
-        <label for="serialnumber" >serial number</label>
+        <label for="serialnumber" >serial number
         <InputText @bind-Value="Machine.SerialNumber" id="serialnumber" type="text"/>
-        <ValidationMessage For="@(()=> Machine.SerialNumber)"/>
+            <ValidationMessage For="@(()=> Machine.SerialNumber)" />
+        </label>
     </div>
     <div>
         <label for="machinetype">Machine type:</label>
-        <InputText @bind-Value="Machine.MachineType" id="machinetype" />
+        <InputSelect @bind-Value="Machine.MachineType">
+            <option value="">
+                Select machine type...
+            </option>
+            @foreach (var machinetype in MachineTypeList)
+            {
+                <option value="@machinetype">
+                    @machinetype
+                </option>
+            }
+        </InputSelect>
         <ValidationMessage For="@(() => Machine.MachineType)" />
     </div>
-    <button type="submit" @onclick="addMachine">Submit</button>
+    <button type="submit"@onclick="@addMachine">Submit</button>
 </EditForm>
-<button type="submit" form="@FormId" class="btn btn-primary">Save</button>
-<button type="button" class="btn btn-light" ></button>
 @code {
-    private MachineModel Machine = new MachineModel();
-    private string FormId = "formId";
+   
 
 
    

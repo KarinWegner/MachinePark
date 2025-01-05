@@ -1,27 +1,32 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using MachinePark.Entities;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace MachinePark.Components.Pages
 {
     public partial class AddMachine
     {
 
-        public static List<MachineType> MachineTypes;
+        public static List<string> MachineTypeList;
+        private EditContext? editContext;
+        private MachineModel Machine = new MachineModel();
+        private string FormId = "formId";
         protected override void OnInitialized()
         {
-            MachineStorageService.OnChange += StateHasChanged;
+            MachineService.OnChange += StateHasChanged;
             Machine = new MachineModel();
-            MachineTypes = MachineStorageService.GetMachineTypes();
+            MachineTypeList = MachineService.GetMachineTypeNames();
+            editContext = new(Machine);
         }
         private void addMachine()
         {
-            MachineType machineType = MachineTypes.FirstOrDefault(m => m.MachineTypeName ==Machine.MachineType);
-            MachineStorageService.AddMachine(Machine.SerialNumber, machineType);
+            
+            MachineService.AddMachine(Machine.SerialNumber, Machine.MachineType);
         }
         public void Dispose()
         {
-            MachineStorageService.OnChange -= StateHasChanged;
+            MachineService.OnChange -= StateHasChanged;
         }
 
         public class MachineModel : IValidatableObject
@@ -60,7 +65,7 @@ namespace MachinePark.Components.Pages
                             "macihne type has to be between 1 and 16 characters",
                             new[] { nameof(MachineType) });
                     }
-                    if (!MachineTypes.Any(m => m.MachineTypeName == MachineType) )
+                    if (!MachineTypeList.Any(m => m == MachineType) )
                     {
                         yield return new ValidationResult(
                             "Machine does not belong to allowed machinetype group",
