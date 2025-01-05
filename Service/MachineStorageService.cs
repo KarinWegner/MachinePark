@@ -22,50 +22,32 @@ namespace MachinePark.Service
             
         }
         
-        public event Action? OnChange;
+        //public event Action? OnChange;
+
+        public void AddMachine(Machine newMachine)
+        {
+            if (newMachine == null) throw new ArgumentNullException("No machine was submitted");
+
+            Machines.Add(newMachine);
+          //  NotifyStateChanged();
+        }
 
 
        
 
-        public void DeleteMachine(int id)
-        {
-            Machine machineToDelete = Machines.FirstOrDefault(x => x.Id == id);
-            if (machineToDelete == null)
-            {
-                throw new Exception("Machine not found");
-            }
-            
-            Machines.Remove(machineToDelete);
-            NotifyStateChanged();
-
-        }
-        public void AddMachine(string serialNumber, MachineType machineType)
-        {
-            Machine newMachine = new Machine(){
-                SerialNumber = serialNumber,
-                MachineType = machineType,
-                Id = NextId++
-            };
-            Machines.Add(newMachine);
-        }
-        public void EditMachine(int id, string serialNumber, string machineType)
-        {
-            
-
-        }
-        public bool MachineExists(int id)
-        {
-           return Machines.Any(m => m.Id == id);
-        }
+       
+       
+       
+       
         //public async Task SeedMachines(int numberOfMachines)
         //{
         //   Machines= await dataSeed.SeedData(numberOfMachines);
             
         //}
-        private void NotifyStateChanged()
-        {
-            OnChange?.Invoke();
-        }
+        //private void NotifyStateChanged()
+        //{
+        //    OnChange?.Invoke();
+        //}
 
         internal List<MachineType> GetMachineTypes()
         {
