@@ -1,9 +1,11 @@
 ﻿@using MachinePark.Entities
 @using MachinePark.Service
+@using static MachinePark.Service.MachineService
 @using static MachinePark.Service.MachineStorageService
 @attribute [StreamRendering(true)]
 
-@inject MachineStorageService MachineStorageService
+@inject MachineService MachineService
+@inject MachineStorageService MachineService
 
 
 @if(machineList is null){
@@ -66,7 +68,7 @@ else{
                 <td>
                     @if (machine.IsRunning)
                     {
-                        <span class="badge text-bg-success">Active</span>
+                            <h5><span class="badge bg-success p-1">Active</span></h5>
                     }
                     else{
 
