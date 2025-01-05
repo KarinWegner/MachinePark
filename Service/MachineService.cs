@@ -89,7 +89,20 @@ namespace MachinePark.Service
                 OnChange?.Invoke();
             }
 
-        
+        internal int CountMachines()
+        {
+            return MachineList.Count();
         }
+
+        internal int CountActiveMachines()
+        {
+            return MachineList.Where(m =>m.IsRunning == true).Count();
+        }
+
+        internal int CountAvailableMachines()
+        {
+            return MachineList.Where(m => m.OnLease == true).Count();
+        }
+    }
 
 }
