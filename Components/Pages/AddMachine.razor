@@ -8,9 +8,10 @@
 @rendermode InteractiveServer
 
 
-<EditForm Model="@Machine" @OnValidSubmit="@addMachine" >
+<EditForm Model="@Machine" OnValidSubmit="HandleValidSubmit" OnInvalidSubmit="HandleInvalidSubmit">
     <DataAnnotationsValidator/>
-
+    <div class="row">
+        <div class="col-8">
     <div>
         <label for="serialnumber" >serial number
         <InputText @bind-Value="Machine.SerialNumber" id="serialnumber" type="text"/>
@@ -32,8 +33,26 @@
         </InputSelect>
         <ValidationMessage For="@(() => Machine.MachineType)" />
     </div>
-    <button type="submit"@onclick="@addMachine">Submit</button>
+        <button type="submit">Submit</button>
+
+        </div>
+    </div>
+
+    @if (displayValidationErrorMessages)
+    {
+        <div class="col-md-4" style="margin-top:10px">
+            <label>Validation Messages: </label>
+            <ValidationSummary />
+        </div>
+    }
 </EditForm>
+
+@if (displayMachineAddedToDB)
+{
+    <div class="row bg-success text-white col-md-4" style="margin-top:10px; height:40px">
+        <label class="p-2">Machine added to database... </label>
+    </div>
+}
 @code {
    
 

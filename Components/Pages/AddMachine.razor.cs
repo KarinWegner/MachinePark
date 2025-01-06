@@ -8,21 +8,35 @@ namespace MachinePark.Components.Pages
     public partial class AddMachine
     {
 
-        public static List<string> MachineTypeList;
+        public static IEnumerable<string> MachineTypeList;
         private EditContext? editContext;
         private MachineModel Machine = new MachineModel();
-        private string FormId = "formId";
+        bool displayMachineAddedToDB = false;
+        bool displayValidationErrorMessages = false;
         protected override void OnInitialized()
         {
             MachineService.OnChange += StateHasChanged;
             Machine = new MachineModel();
-            MachineTypeList = MachineService.GetMachineTypeNames();
+            MachineTypeList = MachineService.GetMachineTypeNames().ToList();
             editContext = new(Machine);
         }
-        private void addMachine()
+
+        private async void HandleValidSubmit()
+        {
+            await MachineService.AddMachine(Machine.SerialNumber, Machine.MachineType);
+            displayMachineAddedToDB = true;
+            displayValidationErrorMessages = false;
+            
+        }
+        private async void HandleInvalidSubmit()
+        {
+            displayValidationErrorMessages = true;
+            displayMachineAddedToDB = false;
+        }
+        private async Task addMachine()
         {
             
-            MachineService.AddMachine(Machine.SerialNumber, Machine.MachineType);
+           
         }
         public void Dispose()
         {
