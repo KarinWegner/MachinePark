@@ -24,7 +24,7 @@ namespace MachinePark.Service
         
         //public event Action? OnChange;
 
-        public void AddMachine(Machine newMachine)
+        public async Task AddMachine(Machine newMachine)
         {
             if (newMachine == null) throw new ArgumentNullException("No machine was submitted");
 

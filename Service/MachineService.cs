@@ -37,7 +37,7 @@ namespace MachinePark.Service
         }
         private List<Machine> MachineList => MachineStorageService.Machines;
        
-        public void AddMachine(string serialNumber, string machineType)
+        public async Task AddMachine(string serialNumber, string machineType)
         {
            
             var newMachinesType = MachineStorageService.MachineTypes.FirstOrDefault(t=>t.MachineTypeName==machineType);
@@ -52,9 +52,11 @@ namespace MachinePark.Service
             Id= GetNextId()};
             MachineList.Add(newMachine);
         }
-        public void EditMachine(int id, string serialNumber, string machineType)
+        public async Task<Machine> EditMachine(int id, string serialNumber, string machineType)
         {
+            Machine editedMachine = new Machine();
 
+            return editedMachine;
         }
             public void DeleteMachine(int id)
         {
@@ -68,16 +70,17 @@ namespace MachinePark.Service
             NotifyStateChanged();
 
         }
-        public bool MachineExists(int id)
+        public async Task<bool> MachineExists(int id)
         {
             return MachineList.Any(m => m.Id == id);
         }
-        public List<Machine> GetMachines()
+        public async Task<IEnumerable<Machine>> GetMachines()
         {
-            return MachineList;
+            IEnumerable<Machine> machineList = MachineList.AsEnumerable();
+            return machineList.ToList();
         }
 
-        public List<string> GetMachineTypeNames()
+        public IEnumerable<string> GetMachineTypeNames()
         {
             return MachineStorageService.MachineTypes.Select(t=>t.MachineTypeName).ToList();
             
