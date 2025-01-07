@@ -1,11 +1,13 @@
-﻿using System.Security.Cryptography;
+﻿using System.Linq.Expressions;
+using System.Security.Cryptography;
 using MachinePark.Entities;
 using MachinePark.Service;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace MachinePark.Service
 {
-    public class MachineStorageService
+    public class MachineStorageService : IAsyncQueryProvider
     {
         public List<Machine> _machineGarage;
         public int NextId;
@@ -29,20 +31,30 @@ namespace MachinePark.Service
             if (newMachine == null) throw new ArgumentNullException("No machine was submitted");
 
             Machines.Add(newMachine);
-          //  NotifyStateChanged();
+           // NotifyStateChanged();
+        }
+        public void DeleteMachine(int machineId)
+        {
+            Machine machineToDelete = Machines.FirstOrDefault(x => x.Id == machineId);
+            if (machineToDelete == null) throw new ArgumentNullException("Machine does not exist in database");
+
+            Machines.Remove(machineToDelete);
+        }
+        public static List<Machine> GetGeneratedMachines()
+        {
+            return Machines;
         }
 
 
-       
 
-       
-       
-       
-       
+
+
+
+
         //public async Task SeedMachines(int numberOfMachines)
         //{
         //   Machines= await dataSeed.SeedData(numberOfMachines);
-            
+
         //}
         //private void NotifyStateChanged()
         //{
@@ -52,6 +64,35 @@ namespace MachinePark.Service
         internal List<MachineType> GetMachineTypes()
         {
             return MachineTypes;
+        }
+        public IQueryable<Machine> GetMachineQuery(List<Machine> machineList)
+        {
+            return machineList.AsQueryable();
+        }
+
+        public TResult ExecuteAsync<TResult>(Expression expression, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IQueryable CreateQuery(Expression expression)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IQueryable<TElement> CreateQuery<TElement>(Expression expression)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object? Execute(Expression expression)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TResult Execute<TResult>(Expression expression)
+        {
+            throw new NotImplementedException();
         }
     }
 }

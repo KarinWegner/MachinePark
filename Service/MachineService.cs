@@ -2,21 +2,26 @@
 using Microsoft.AspNetCore.Components;
 using System.Reflection.PortableExecutable;
 using Machine = MachinePark.Entities.Machine;
+using Microsoft.EntityFrameworkCore;
+using MachinePark.Request;
 
 namespace MachinePark.Service
 {
     public class MachineService
     {
         
-        MachineStorageService MachineStorageService { get; set; }
+       
         int startingId;
-
-        public MachineService(MachineStorageService machineStorageService) 
+        MachineStorageService storageService;
+        public RequestParams RequestParams;
+        public MachineService(MachineStorageService machineStorageService)
         {
-            
-            startingId = MachineList.Count;
+            MachineList = MachineStorageService.GetGeneratedMachines();
+            int machineCount = MachineList.Count;
+            startingId = MachineList.Count();
+            RequestParams = new RequestParams();
         }
-
+        
         
         private int nextId;
         public int GetNextId()
@@ -35,7 +40,20 @@ namespace MachinePark.Service
                 return nextId++;
             }
         }
-        private List<Machine> MachineList => MachineStorageService.Machines;
+        public List<Machine> MachineList;
+        public PagedList<Machine> PagedMachineList;
+        public async Task<List<Machine>> GetMachines()
+        {
+            return MachineList.ToList();
+           
+        }
+
+        public async Task<List<Machine>> GetPagedMachineList(int pagesize, int start)
+        {
+
+            return  MachineList.Skip(start).Take(pagesize).ToList(); 
+
+        }
        
         public async Task AddMachine(string serialNumber, string machineType)
         {
@@ -72,13 +90,9 @@ namespace MachinePark.Service
         }
         public async Task<bool> MachineExists(int id)
         {
-            return MachineList.Any(m => m.Id == id);
+            return  MachineList.Any(m => m.Id == id);
         }
-        public async Task<IEnumerable<Machine>> GetMachines()
-        {
-            IEnumerable<Machine> machineList = MachineList.AsEnumerable();
-            return machineList.ToList();
-        }
+       
 
         public IEnumerable<string> GetMachineTypeNames()
         {

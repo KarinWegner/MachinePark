@@ -16,7 +16,7 @@ namespace MachinePark.Components.Pages
 
         protected override void OnInitialized()
         {
-            Machine = MachineStorageService.Machines.Single(m => m.Id == MachineID);
+            Machine = MachineService.MachineList.Single(m => m.Id == MachineID);
         }
         private void ChangeActiveStatus()
         {
